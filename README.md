@@ -3,4 +3,4 @@ LASM is an assembler made to build extremely small executables.
 
 # Platforms
 LASM currently supports the following platforms
- - x86
+ - linux x86
