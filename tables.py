@@ -72,3 +72,8 @@ OP_TABLE = {
 	"int": OP_INT,
 	"add": OP_ADD
 }
+
+mov_r_imm = {
+    4: 0xb8,
+    2: 0xb8
+}

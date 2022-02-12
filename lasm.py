@@ -148,6 +148,30 @@ def compile_program(progname, program, outfile, infile, autorun):
         token = program[ip]
 
         if token["type"] == TOKEN_OP:
+            if token["val"] == OP_MOV:
+                dest, src = program[ip+1:ip+3] # look at it for a second
+                ip += 2
+                if (dest["type"], src["type"]) not in [(TOKEN_REG, TOKEN_IMM)]: # TODO: make function to check for invalid opcode and operand combinations
+                    print("%s:%d:%d invalid combination of opcode and operands" % token["loc"])
+                    exit(1)
+                if dest["type"] == TOKEN_REG:
+                    if src["type"] == TOKEN_IMM:
+                        opcode = bytearray([mov_r_imm[dest["width"]] + dest["val"]] + int_bytes_little_endian(src["val"], 4))  
+                        output += opcode
+
+            elif token["val"] == OP_ADD:
+                dest, src = program[ip+1:ip+3]
+                ip += 2
+            elif token["val"] == OP_INT:
+                nr = program[ip+1]
+                ip += 1
+                if nr["type"] == TOKEN_IMM:
+                    opcode = bytearray([0xcd, nr["val"] & 255])
+                    output += opcode
+                else:
+                    print("%s:%d:%d invalid combination of opcode and operands" % nr["loc"])
+            else:
+                assert False, "unreachable"
             ip += 1
 
         elif token["type"] == TOKEN_IMM:
