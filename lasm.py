@@ -106,6 +106,17 @@ def get_token(word):
             "text": word
         }
 
+def check_operands(instruction, *ops):
+    if instruction == OP_MOV:
+        dest, src = ops
+        return (dest["type"], src["type"]) in [(TOKEN_REG, TOKEN_IMM), (TOKEN_REG, TOKEN_REG)]
+    elif instruction == OP_INT:
+        nr ,= ops
+        return dest["type"] == TOKEN_IMM
+    elif instruction == OP_ADD:
+        dest, src = ops
+        return (dest["type"], src["type"]) in [(TOKEN_REG, TOKEN_IMM), (TOKEN_REG, TOKEN_REG)]
+
 def compile_program(progname, program, outfile, infile, autorun):
     ip = 0
     size = 0
